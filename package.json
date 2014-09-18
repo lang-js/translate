@@ -1,0 +1,31 @@
+{
+  "name": "lang-js-translate",
+  "version": "0.1.0",
+  "description": "translation with pluralization",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lang-js/translate.git"
+  },
+  "keywords": [
+    "internationalization",
+    "pluralization"
+  ],
+  "author": "Cameron Bytheway <bytheway.cameron@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lang-js/translate/issues"
+  },
+  "homepage": "https://github.com/lang-js/translate",
+  "dependencies": {
+    "lang-js-interpolate": "^0.1.1",
+    "lang-js-plural": "^1.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^1.21.4",
+    "should": "^4.0.4"
+  }
+}
