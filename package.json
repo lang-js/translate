@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/lang-js/translate",
   "dependencies": {
-    "lang-js-interpolate": "^0.1.1",
+    "directiv-core-reduce": "^1.0.0",
+    "lang-js-interpolate": "^1.0.0",
     "lang-js-plural": "^1.0.0"
   },
   "devDependencies": {
