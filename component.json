@@ -1,0 +1,15 @@
+{
+  "name": "lang-js-translate",
+  "version": "1.0.0",
+  "description": "translation with pluralization",
+  "repo": "lang-js/translate",
+  "main": "index.js",
+  "author": "Cameron Bytheway <bytheway.cameron@gmail.com>",
+  "scripts": ["index.js"],
+  "license": "MIT",
+  "dependencies": {
+    "directiv/core-reduce": "^1.0.0",
+    "lang-js/interpolate": "^1.0.1",
+    "lang-js/plural": "^1.0.0"
+  }
+}
