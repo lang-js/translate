@@ -38,14 +38,15 @@ function translate(arr, locale, opts) {
   }
 
   var key = opts.pluralKey || 'smart_count';
+  var validatePluralKey = typeof opts.validatePluralKey === 'undefined' ? true : opts.validatePluralKey;
 
   return augment(function(params) {
     if (typeof params === 'number') params = convert(params, key);
 
     var count = parseInt(params[key], 10);
-    if (isNaN(count)) throw new Error('expected "' + key + '" to be a number. got "' + (typeof params[key]) + '".');
+    if (validatePluralKey && isNaN(count)) throw new Error('expected "' + key + '" to be a number. got "' + (typeof params[key]) + '".');
 
-    return fns[fn(count)](params);
+    return fns[fn(count || 0)](params);
   }, Object.keys(paramsObj));
 }
 
