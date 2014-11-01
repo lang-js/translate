@@ -22,8 +22,9 @@
   "homepage": "https://github.com/lang-js/translate",
   "dependencies": {
     "directiv-core-reduce": "^1.0.0",
+    "lang-js-cardinal": "^0.1.2",
     "lang-js-interpolate": "^1.0.0",
-    "lang-js-plural": "^1.0.0"
+    "lang-js-ordinal": "^0.1.2"
   },
   "devDependencies": {
     "mocha": "^1.21.4",
