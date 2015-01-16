@@ -14,7 +14,7 @@ describe('translate', function() {
   it('should pluralize a phrase with an array', function() {
     var fn = translate([
       'a car',
-      '%{smart_count} cars'
+      '%{count} cars'
     ], 'en');
 
     fn(0).should.eql([0, ' cars']);
@@ -25,7 +25,7 @@ describe('translate', function() {
   it('should pluralize a phrase with a CLDR object', function() {
     var fn = translate({
       one: 'a car',
-      other: '%{smart_count} cars'
+      other: '%{count} cars'
     }, 'en');
 
     fn(0).should.eql([0, ' cars']);
@@ -36,10 +36,10 @@ describe('translate', function() {
   it('should pluralize an ordinal phrase with a CLDR object', function() {
     var fn = translate({
       _format: 'ordinal',
-      one: '%{smart_count}st car',
-      two: '%{smart_count}nd car',
-      few: '%{smart_count}rd car',
-      other: '%{smart_count}th car'
+      one: '%{count}st car',
+      two: '%{count}nd car',
+      few: '%{count}rd car',
+      other: '%{count}th car'
     }, 'en');
 
     fn(0).should.eql([0, 'th car']);
@@ -54,10 +54,30 @@ describe('translate', function() {
       0: 'There aren\'t any cars!',
       20: 'Ooo lucky 20!',
       one: 'a car',
-      other: '%{smart_count} cars'
+      other: '%{count} cars'
     }, 'en');
 
     fn(0).should.eql(['There aren\'t any cars!']);
     fn(20).should.eql(['Ooo lucky 20!']);
+  });
+
+  it('should discover a plural key without arguments', function() {
+    var fn = translate({
+      one: 'a car',
+      other: 'many cars'
+    }, 'en', {defaultPluralKey: 'cars'});
+
+    fn({cars: 1}).should.eql(['a car']);
+    fn({cars: 20}).should.eql(['many cars']);
+  });
+
+  it('should make a best guess at which key from many to use', function() {
+    var fn = translate({
+      one: 'a %{first}, %{second} car',
+      other: '%{count} %{first}, %{second} cars'
+    }, 'en');
+
+    fn({first: 'junky', second: 'horrible', count: 1}).should.eql(['a ', 'junky', ', ', 'horrible', ' car']);
+    fn({first: 'junky', second: 'horrible', count: 20}).should.eql([20, ' ', 'junky', ', ', 'horrible', ' cars']);
   });
 });

@@ -36,18 +36,28 @@ function translate(cldr, locale, opts) {
 
   var paramsObj = {};
   var cases = toFunctions(cldr, pluralize, opts, paramsObj);
+  var paramsKeys = Object.keys(paramsObj);
 
-  var key = cldr._plural_key || opts.pluralKey || 'smart_count';
+  var key = cldr._plural_key ||
+            opts.pluralKey ||
+            discoverKey(paramsKeys,
+                        opts.discoverableKeys || {'smart_count':1, 'count':1, 'length':1, 'items':1, 'total':1},
+                        opts.defaultPluralKey || 'smart_count');
+
   var validatePluralKey = typeof opts.validatePluralKey === 'undefined' ? true : opts.validatePluralKey;
+  var silentValidation = !!opts.validatePluralSilent;
 
   return augment(function(params) {
     if (typeof params === 'number') params = convertSmartCount(params, key);
 
     var count = parseInt(params[key], 10);
-    if (validatePluralKey && isNaN(count)) throw new Error('expected "' + key + '" to be a number. got "' + (typeof params[key]) + '".');
+    if (validatePluralKey && isNaN(count)) {
+      if (silentValidation) return [];
+      throw new Error('expected "' + key + '" to be a number. got "' + (typeof params[key]) + '".');
+    }
 
     return (cases[count] || cases[pluralize(count || 0)])(params);
-  }, Object.keys(paramsObj));
+  }, paramsKeys);
 }
 
 /**
@@ -82,6 +92,24 @@ function toFunctions(cldr, pluralize, opts, paramsObj) {
     merge(paramsObj, t.params);
     return acc;
   }, {});
+}
+
+/**
+ * Auto-discover the plural key
+ *
+ * @param {Array} keys
+ * @param {Object} discoverableKeys
+ * @param {String} defaultKey
+ * @return {String}
+ */
+
+function discoverKey(arr, discoverableKeys, defaultKey) {
+  if (arr.length === 0) return defaultKey;
+  if (arr.length === 1) return arr[0];
+  for (var i = 0; i < arr.length; i++) {
+    if (discoverableKeys[arr[i]]) return arr[i];
+  }
+  return defaultKey;
 }
 
 /**
