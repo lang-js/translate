@@ -1,6 +1,6 @@
 {
   "name": "lang-js-translate",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "translation with pluralization",
   "repo": "lang-js/translate",
   "main": "index.js",
