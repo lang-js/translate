@@ -56,7 +56,7 @@ function translate(cldr, locale, opts) {
       throw new Error('expected "' + key + '" to be a number. got "' + (typeof params[key]) + '".');
     }
 
-    if (opts.toLocaleString !== false) params[key] = count.toLocaleString();
+    if (opts.toLocaleString !== false) params = formatNumbers(params);
 
     return (cases[count] || cases[pluralize(count || 0)])(params);
   }, paramsKeys);
@@ -181,6 +181,19 @@ function convertSmartCount(val, key) {
   var obj = {};
   obj[key] = val;
   return obj;
+}
+
+/**
+ * Format numbers with toLocaleString
+ */
+
+function formatNumbers(prevParams) {
+  var params = {}, value;
+  for (var k in prevParams) {
+    value = prevParams[k];
+    params[k] = typeof value === 'number' ? value.toLocaleString() : value;
+  }
+  return params;
 }
 
 /**
