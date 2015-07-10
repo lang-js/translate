@@ -31,6 +31,7 @@ describe('translate', function() {
     fn(0).should.eql([0, ' cars']);
     fn(1).should.eql(['a car']);
     fn(2).should.eql([2, ' cars']);
+    fn(10000).should.eql([10000, ' cars']);
   });
 
   it('should pluralize an ordinal phrase with a CLDR object', function() {

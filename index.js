@@ -56,6 +56,8 @@ function translate(cldr, locale, opts) {
       throw new Error('expected "' + key + '" to be a number. got "' + (typeof params[key]) + '".');
     }
 
+    if (opts.toLocaleString !== false) params[key] = count.toLocaleString();
+
     return (cases[count] || cases[pluralize(count || 0)])(params);
   }, paramsKeys);
 }
