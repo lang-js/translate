@@ -6,6 +6,7 @@ var plural = {
   cardinal: require('lang-js-cardinal'),
   ordinal: require('lang-js-ordinal')
 };
+var number = require('lang-js-number');
 var interpolate = require('lang-js-interpolate');
 var reduce = require('directiv-core-reduce');
 
@@ -46,6 +47,7 @@ function translate(cldr, locale, opts) {
 
   var validatePluralKey = typeof opts.validatePluralKey === 'undefined' ? true : opts.validatePluralKey;
   var silentValidation = !!opts.validatePluralSilent;
+  var decimal = number.decimal[locale] || number.decimal.en;
 
   return augment(function(params) {
     if (typeof params === 'number') params = convertSmartCount(params, key);
@@ -56,7 +58,7 @@ function translate(cldr, locale, opts) {
       throw new Error('expected "' + key + '" to be a number. got "' + (typeof params[key]) + '".');
     }
 
-    if (opts.toLocaleString !== false) params = formatNumbers(params);
+    if (opts.toLocaleString !== false) params = formatNumbers(params, decimal);
 
     return (cases[count] || cases[pluralize(count || 0)])(params);
   }, paramsKeys);
@@ -184,14 +186,14 @@ function convertSmartCount(val, key) {
 }
 
 /**
- * Format numbers with toLocaleString
+ * Format numbers with lang-js-number
  */
 
-function formatNumbers(prevParams) {
+function formatNumbers(prevParams, decimal) {
   var params = {}, value;
   for (var k in prevParams) {
     value = prevParams[k];
-    params[k] = typeof value === 'number' ? value.toLocaleString() : value;
+    params[k] = typeof value === 'number' ? decimal(value) : value;
   }
   return params;
 }

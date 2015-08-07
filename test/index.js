@@ -17,9 +17,9 @@ describe('translate', function() {
       '%{count} cars'
     ], 'en');
 
-    fn(0).should.eql([0, ' cars']);
+    fn(0).should.eql(['0', ' cars']);
     fn(1).should.eql(['a car']);
-    fn(2).should.eql([2, ' cars']);
+    fn(2).should.eql(['2', ' cars']);
   });
 
   it('should pluralize a phrase with a CLDR object', function() {
@@ -28,10 +28,10 @@ describe('translate', function() {
       other: '%{count} cars'
     }, 'en');
 
-    fn(0).should.eql([0, ' cars']);
+    fn(0).should.eql(['0', ' cars']);
     fn(1).should.eql(['a car']);
-    fn(2).should.eql([2, ' cars']);
-    fn(10000).should.eql([10000, ' cars']);
+    fn(2).should.eql(['2', ' cars']);
+    fn(10000).should.eql(['10,000', ' cars']);
   });
 
   it('should pluralize an ordinal phrase with a CLDR object', function() {
@@ -43,11 +43,11 @@ describe('translate', function() {
       other: '%{count}th car'
     }, 'en');
 
-    fn(0).should.eql([0, 'th car']);
-    fn(1).should.eql([1, 'st car']);
-    fn(2).should.eql([2, 'nd car']);
-    fn(3).should.eql([3, 'rd car']);
-    fn(4).should.eql([4, 'th car']);
+    fn(0).should.eql(['0', 'th car']);
+    fn(1).should.eql(['1', 'st car']);
+    fn(2).should.eql(['2', 'nd car']);
+    fn(3).should.eql(['3', 'rd car']);
+    fn(4).should.eql(['4', 'th car']);
   });
 
   it('should use a specific number if present', function() {
@@ -79,6 +79,6 @@ describe('translate', function() {
     }, 'en');
 
     fn({first: 'junky', second: 'horrible', count: 1}).should.eql(['a ', 'junky', ', ', 'horrible', ' car']);
-    fn({first: 'junky', second: 'horrible', count: 20}).should.eql([20, ' ', 'junky', ', ', 'horrible', ' cars']);
+    fn({first: 'junky', second: 'horrible', count: 20}).should.eql(['20', ' ', 'junky', ', ', 'horrible', ' cars']);
   });
 });
