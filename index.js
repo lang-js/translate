@@ -142,12 +142,11 @@ function augment(fn, keys) {
 
 function lookup(locale, format) {
   if (!locale) throw new Error('missing required "locale" parameter');
+  locale = locale.toLowerCase().replace('-', '_');
   format = format || 'cardinal';
   var p = plural[format];
   if (!p) throw new Error('unsupported plural format "' + format + '"');
-  var fn = p[locale];
-  if (fn) return fn;
-  fn = plural[locale.split(/[\-_]/)[0]];
+  var fn = p[locale] || p[locale.split('_')[0]];
   if (fn) return fn;
 
   throw new Error('unsupported locale "' + locale + '"');

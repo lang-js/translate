@@ -81,4 +81,14 @@ describe('translate', function() {
     fn({first: 'junky', second: 'horrible', count: 1}).should.eql(['a ', 'junky', ', ', 'horrible', ' car']);
     fn({first: 'junky', second: 'horrible', count: 20}).should.eql(['20', ' ', 'junky', ', ', 'horrible', ' cars']);
   });
+
+  it('should strip contry codes if they aren\'t present', function() {
+    var fn = translate({
+      one: 'Um carro',
+      other: '%{count} carros'
+    }, 'pt-BR');
+
+    fn({count: 1}).should.eql(['Um carro']);
+    fn({count: 2}).should.eql(['2', ' carros']);
+  });
 });
