@@ -14,7 +14,17 @@ var reduce = require('directiv-core-reduce');
  * Expose the translate function
  */
 
-exports = module.exports = translate;
+module.exports = translate;
+
+/**
+ * Expose the number formatting function
+ */
+
+translate.number = function(locale, opts) {
+  opts = opts || {};
+  format = opts.style || 'decimal';
+  return lookup(locale, format, number);
+};
 
 /**
  * Compile a translation function
@@ -30,7 +40,7 @@ function translate(cldr, locale, opts) {
 
   opts = opts || {};
 
-  var pluralize = lookup(locale, cldr._format || opts.pluralFormat);
+  var pluralize = lookup(locale, cldr._format || opts.pluralFormat, plural);
   if (Array.isArray(cldr)) cldr = convertArray(cldr, pluralize, opts);
 
   validate(cldr, pluralize);
@@ -140,12 +150,12 @@ function augment(fn, keys) {
  * @return {Function}
  */
 
-function lookup(locale, format) {
+function lookup(locale, format, obj) {
   if (!locale) throw new Error('missing required "locale" parameter');
   locale = locale.toLowerCase().replace('-', '_');
   format = format || 'cardinal';
-  var p = plural[format];
-  if (!p) throw new Error('unsupported plural format "' + format + '"');
+  var p = obj[format];
+  if (!p) throw new Error('unsupported format "' + format + '"');
   var fn = p[locale] || p[locale.split('_')[0]];
   if (fn) return fn;
 

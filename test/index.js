@@ -91,4 +91,10 @@ describe('translate', function() {
     fn({count: 1}).should.eql(['Um carro']);
     fn({count: 2}).should.eql(['2', ' carros']);
   });
+
+  it('should format numbers', function() {
+    translate.number('en')(1234).should.eql('1,234');
+    translate.number('en', {style: 'currency'})(1234).should.eql('1,234.00');
+    translate.number('en', {style: 'percent'})(1234).should.eql('1,234%');
+  });
 });
