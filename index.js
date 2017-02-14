@@ -8,7 +8,6 @@ var plural = {
 };
 var number = require('lang-js-number');
 var interpolate = require('lang-js-interpolate');
-var reduce = require('directiv-core-reduce');
 
 /**
  * Expose the translate function
@@ -55,9 +54,10 @@ function translate(cldr, locale, opts) {
                         opts.discoverableKeys || {'smart_count':1, 'count':1, 'length':1, 'items':1, 'total':1},
                         opts.defaultPluralKey || 'smart_count');
 
-  var validatePluralKey = typeof opts.validatePluralKey === 'undefined' ? true : opts.validatePluralKey;
+  var validatePluralKey = opts.validatePluralKey !== false;
   var silentValidation = !!opts.validatePluralSilent;
   var decimal = number.decimal[locale] || number.decimal.en;
+  var toLocaleString = opts.toLocaleString !== false;
 
   return augment(function(params) {
     if (typeof params === 'number') params = convertSmartCount(params, key);
@@ -68,7 +68,7 @@ function translate(cldr, locale, opts) {
       throw new Error('expected "' + key + '" to be a number. got "' + (typeof params[key]) + '".');
     }
 
-    if (opts.toLocaleString !== false) params = formatNumbers(params, decimal);
+    if (toLocaleString) params = formatNumbers(params, decimal);
 
     return (cases[count] || cases[pluralize(count || 0)])(params);
   }, paramsKeys);
@@ -137,8 +137,7 @@ function discoverKey(arr, discoverableKeys, defaultKey) {
 function augment(fn, keys) {
   keys = keys || fn.params || [];
   if (!Array.isArray(keys)) keys = Object.keys(keys);
-  fn.params = reduce(keys);
-  fn.params.keys = keys;
+  fn.params = keys;
   return fn;
 }
 
